@@ -6,3 +6,9 @@ Django Google App Engine integration provided by: https://github.com/potatolondo
 
 Google Appengine Python SDK 1.7.5+
 
+## Run locally
+
+    export PATH=$PATH:<path-to-google_appengine>
+    ./serve.sh
+
+Visit <http://localhost:8080>
