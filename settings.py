@@ -39,27 +39,27 @@ SESSION_ENGINE = "appengine_sessions.backends.cached_db"
 # Uncomment these DB definitions to use Cloud SQL.
 # See: https://developers.google.com/cloud-sql/docs/django#development-settings
 #import os
-#if (os.getenv('SERVER_SOFTWARE', '').startswith('Google App Engine') or
-#    os.getenv('SETTINGS_MODE') == 'prod'):
-#    # Running on production App Engine, so use a Google Cloud SQL database.
-#    DATABASES = {
-#        'default': {
-#            'ENGINE': 'google.appengine.ext.django.backends.rdbms',
-#            'INSTANCE': 'my_project:instance1',
-#            'NAME': 'my_db',
-#            }
-#        }
-#else:
-#    # Running in development, so use a local MySQL database.
-#    DATABASES = {
-#        'default': {
-#            'ENGINE': 'django.db.backends.sqlite3',
-##            'USER': 'root',
-##            'PASSWORD': '',
-##            'HOST': 'localhost',
-#            'NAME': 'my_db',
-#            }
-#        }
+if (os.getenv('SERVER_SOFTWARE', '').startswith('Google App Engine') or
+   os.getenv('SETTINGS_MODE') == 'prod'):
+   # Running on production App Engine, so use a Google Cloud SQL database.
+   DATABASES = {
+       'default': {
+           'ENGINE': 'google.appengine.ext.django.backends.rdbms',
+           'INSTANCE': 'my_project:instance1',
+           'NAME': 'my_db',
+           }
+       }
+else:
+   # Running in development, so use a local MySQL database.
+   DATABASES = {
+       'default': {
+           'ENGINE': 'django.db.backends.sqlite3',
+#            'USER': 'root',
+#            'PASSWORD': '',
+#            'HOST': 'localhost',
+           'NAME': 'my_db',
+           }
+       }
 
 
 
@@ -199,5 +199,5 @@ LOGGING = {
 }
 
 ALLOWED_HOSTS = [
-    'djappeng1ne-beta.appspot.com'
+    'dav-ceretti.appspot.com'
 ]
