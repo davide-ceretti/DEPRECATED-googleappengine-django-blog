@@ -7,7 +7,6 @@ DATASTORE_PATH = os.path.join(ROOT_PATH, 'tmp', 'data')
 
 
 def setup_environ():
-
     # lib
     sys.path.insert(0, os.path.join(ROOT_PATH, 'lib'))
 
@@ -29,7 +28,7 @@ def setup_environ():
     from dev_appserver import fix_sys_path
     fix_sys_path()
 
-    from google.appengine.tools import dev_appserver as tools_dev_appserver
+    from google.appengine.tools import old_dev_appserver as tools_dev_appserver
     from google.appengine import dist
 
     # Parse `app.yaml`
