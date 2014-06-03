@@ -129,7 +129,7 @@ STATICFILES_FINDERS = (
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = '^(&s11q!@t2j@=dgpp65k+df6o1(@1h9cq-$^p@=k4!5))xi6u'
+SECRET_KEY = 'example'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -201,3 +201,8 @@ LOGGING = {
 ALLOWED_HOSTS = [
     'dav-ceretti.appspot.com'
 ]
+
+try:
+    from local_settings import *
+except ImportError:
+    pass
