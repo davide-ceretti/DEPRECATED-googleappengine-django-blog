@@ -11,7 +11,7 @@ DEBUG = not APPENGINE_PRODUCTION
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
+    ('Davide Ceretti', 'dav.ceretti@gmail.com'),
 )
 
 MANAGERS = ADMINS
@@ -164,9 +164,9 @@ INSTALLED_APPS = (
     'core',
     'appengine_sessions',
     # Uncomment the next line to enable the admin:
-    'django.contrib.admin',
+    #'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
-    'django.contrib.admindocs',
+    #'django.contrib.admindocs',
 )
 
 # A sample logging configuration. The only tangible logging
