@@ -1,4 +1,5 @@
 import logging, unittest
+from django.test import TransactionTestCase
 
 from google.appengine.datastore import datastore_stub_util
 from google.appengine.ext import ndb, testbed
@@ -8,7 +9,7 @@ logging.basicConfig()
 log = logging.getLogger("ndbtestcase")
 
 
-class AppEngineTestCase(unittest.TestCase):
+class AppEngineTestCase(TransactionTestCase):
     """Common test setup required for testing App Engine-related things.
 
     You can provide your own default and specific keyword arguments for each
@@ -35,7 +36,7 @@ class AppEngineTestCase(unittest.TestCase):
             "auto_id_policy": datastore_stub_util.SCATTERED,
         }
 
-    def setUp(self):
+    def _pre_setup(self):
         self.testbed = testbed.Testbed()
         self.testbed.activate()
 
@@ -57,12 +58,9 @@ class AppEngineTestCase(unittest.TestCase):
                 )
 
         self.clear_datastore()
-        # Run custom set_up as defined in superclasses
-        getattr(self, 'set_up', lambda *args: None)()
 
-    def tearDown(self):
-        # Run custom tear_down as defined in superclasses
-        getattr(self, 'tear_down', lambda *args: None)()
+
+    def _post_teardown(self):
         self.clear_datastore()
         self.testbed.deactivate()
 
