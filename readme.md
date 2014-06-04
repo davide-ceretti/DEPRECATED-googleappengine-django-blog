@@ -25,8 +25,8 @@ Google Appengine Python SDK 1.9.5
 
 ## Play with shell
 
-    ipython -i shell.py
+    ./shell.py
 
 ## Deploy
 
-    appcfg.py update .
+    ./deploy.sh

@@ -21,7 +21,6 @@ kwargs = dev_appserver_main.DEFAULT_ARGS.copy()
 kwargs.update({
     'use_sqlite': True,
     'datastore_path': DATASTORE_PATH
-    # todo: blobstore, prospective search
 })
 old_dev_appserver.SetupStubs(app_id, **kwargs)
 logging.info('DataStore Path: %s' % DATASTORE_PATH)
