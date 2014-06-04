@@ -57,8 +57,12 @@ class AppEngineTestCase(unittest.TestCase):
                 )
 
         self.clear_datastore()
+        # Run custom set_up as defined in superclasses
+        getattr(self, 'set_up', lambda *args: None)()
 
     def tearDown(self):
+        # Run custom tear_down as defined in superclasses
+        getattr(self, 'tear_down', lambda *args: None)()
         self.clear_datastore()
         self.testbed.deactivate()
 

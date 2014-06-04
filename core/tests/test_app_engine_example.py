@@ -10,7 +10,19 @@ class Thing(ndb.Model):
 class ExampleTestCase(AppEngineTestCase):
     """Example App Engine testcase"""
 
-    def test_thing_exists(self):
-        self.thing = Thing(stuff="Hi")
-        self.thing.put()
-        self.assertEquals(Thing.query().count(), 1)
+    def set_up(self):
+        thing = Thing(stuff="One")
+        thing.put()
+
+    def test_thing_one(self):
+        thing = Thing(stuff="Two")
+        thing.put()
+        self.assertEquals(Thing.query().count(), 2)
+
+    def test_thing_two(self):
+        thing = Thing(stuff="Three")
+        thing.put()
+        self.assertEquals(Thing.query().count(), 2)
+
+    def tear_down(self):
+        pass
