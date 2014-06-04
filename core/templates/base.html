@@ -2,13 +2,15 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    {% block title %}<title>My Blog</title>{% endblock %}
+    {% block title %}<title>{{ blog.title }}</title>{% endblock %}
     {% block head %}{% endblock %}
 </head>
 
 <body>
     <div id="header">
         <h1>{{ blog.title }}</h1>
+        <a href={% url article_list %}>All articles</a>
+        <a href={% url article_create %}>Add article</a>
     </div>
 
     <div id="content">
