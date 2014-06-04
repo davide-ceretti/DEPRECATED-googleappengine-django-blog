@@ -1,9 +1,11 @@
 from django.conf import settings
 from django.conf.urls.defaults import url, patterns
 
+from core.views import ArticleListView
+
 
 urlpatterns = patterns('core.views',
-    url(r'^$', 'hello_world', {}, name='hello-world'),
+    url(r'^$', ArticleListView.as_view(), {}, name='article_list'),
 )
 
 
