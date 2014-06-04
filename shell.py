@@ -12,7 +12,7 @@ setup_environ()
 # Setup shell stubs
 
 from google.appengine.tools import dev_appserver_main
-from google.appengine.tools import dev_appserver
+from google.appengine.tools import old_dev_appserver
 
 app_id = os.environ['APPLICATION_ID']
 
@@ -23,5 +23,5 @@ kwargs.update({
     'datastore_path': DATASTORE_PATH
     # todo: blobstore, prospective search
 })
-dev_appserver.SetupStubs(app_id, **kwargs)
+old_dev_appserver.SetupStubs(app_id, **kwargs)
 logging.info('DataStore Path: %s' % DATASTORE_PATH)
