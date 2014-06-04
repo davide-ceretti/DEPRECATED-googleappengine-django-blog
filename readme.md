@@ -1,5 +1,6 @@
-# A simple Django Blog built on Google App Engine
+# A simple Django Blog built on Google App Engine (WIP)
 
+Currently deployed at http://dav-ceretti.appspot.com/
 Django Google App Engine integration provided by: https://github.com/potatolondon/djappengine
 
 ## System Requirements
