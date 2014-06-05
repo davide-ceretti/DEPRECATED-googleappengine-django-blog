@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect
 from google.appengine.api import users
 
 from core.models import Article, Blog
-from core.forms import ArticleCreateForm
+from core.forms import ArticleCreateForm, BlogUpdateForm
 
 
 class BlogMixin(object):
@@ -95,3 +95,21 @@ class ArticleAdminCreateView(AdminRequiredMixin, BlogMixin, FormView):
     def form_valid(self, form):
         self.form_class.create_article(data=form.cleaned_data)
         return super(ArticleAdminCreateView, self).form_valid(form)
+
+
+class BlogAdminUpdateView(AdminRequiredMixin, BlogMixin, FormView):
+    """
+    Administration page to update blog settings.
+    """
+    template_name = 'blog_admin_update.html'
+    form_class = BlogUpdateForm
+
+    def get_after_login_url(self):
+        return reverse('blog_admin_update')
+
+    def get_success_url(self):
+        return reverse('index')
+
+    def form_valid(self, form):
+        self.form_class.update_blog(data=form.cleaned_data)
+        return super(BlogAdminUpdateView, self).form_valid(form)

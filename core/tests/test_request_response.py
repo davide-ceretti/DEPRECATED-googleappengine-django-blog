@@ -30,8 +30,8 @@ class TestIndexPage(AppEngineTestCase):
         self.assertContains(resp, "This blog looks empty!")
 
     def test_with_articles(self):
-        Article(title="title_article_one").put()
-        Article(title="title_article_two").put()
+        Article(title="title_article_one", body="body_one").put()
+        Article(title="title_article_two",  body="body_two").put()
         resp = self.client.get(self.url)
         self.assertContains(resp, "title_article_one")
         self.assertContains(resp, "title_article_two")
@@ -41,6 +41,7 @@ class TestIndexPage(AppEngineTestCase):
         resp = self.client.get(self.url)
         self.assertContains(resp, "Index")
         self.assertContains(resp, "Manage articles")
+        self.assertContains(resp, "Manage blog")
         self.assertContains(resp, "Add article")
         self.assertContains(resp, "Logout")
         self.assertNotContains(resp, "Login")
@@ -52,6 +53,7 @@ class TestIndexPage(AppEngineTestCase):
         self.assertContains(resp, "Logout")
         self.assertNotContains(resp, "Login")
         self.assertNotContains(resp, "Manage articles")
+        self.assertNotContains(resp, "Manage blog")
         self.assertNotContains(resp, "Add article")
 
     def test_visible_menu_when_not_authenticated(self):
@@ -59,6 +61,7 @@ class TestIndexPage(AppEngineTestCase):
         self.assertContains(resp, "Index")
         self.assertContains(resp, "Login")
         self.assertNotContains(resp, "Manage articles")
+        self.assertNotContains(resp, "Manage blog")
         self.assertNotContains(resp, "Add article")
         self.assertNotContains(resp, "Logout")
 
@@ -93,8 +96,8 @@ class TestManageArticlesPage(AppEngineTestCase):
 
     def test_with_articles(self):
         self.users_login('admin@localhost', is_admin=True)
-        Article(title="title_article_one").put()
-        Article(title="title_article_two").put()
+        Article(title="title_article_one", body="body_one").put()
+        Article(title="title_article_two",  body="body_two").put()
 
         resp = self.client.get(self.url)
 
@@ -159,3 +162,42 @@ class TestArticleCreatePage(AppEngineTestCase):
 
         self.assertContains(resp, 'This field is required')
         self.assertEqual(Article.all().count(), 0)
+
+
+class TestUpdateBlog(AppEngineTestCase):
+    url = reverse('blog_admin_update')
+
+    def setUp(self):
+        Blog(title="my_blog_title").put()
+
+    def test_user_not_admin(self):
+        self.users_login('user@localhost', is_admin=False)
+        resp = self.client.get(self.url)
+        self.assertEqual(resp.status_code, 302)
+
+    def test_user_not_authenticated(self):
+        resp = self.client.get(self.url)
+        self.assertEqual(resp.status_code, 302)
+
+    def test_200_and_form_in_page(self):
+        self.users_login('admin@localhost', is_admin=True)
+        resp = self.client.get(self.url)
+        self.assertContains(resp, "Title")
+
+    def test_post_no_title(self):
+        self.users_login('admin@localhost', is_admin=True)
+        data = {'title': ''}
+
+        resp = self.client.post(self.url, data)
+
+        self.assertContains(resp, 'This field is required')
+        self.assertEqual(Blog.get_unique().title, 'my_blog_title')
+
+    def test_post_valid(self):
+        self.users_login('admin@localhost', is_admin=True)
+        data = {'title': 'new_blog_title'}
+
+        resp = self.client.post(self.url, data)
+
+        self.assertRedirects(resp, reverse('index'))
+        self.assertEqual(Blog.get_unique().title, 'new_blog_title')

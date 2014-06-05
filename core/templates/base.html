@@ -12,6 +12,7 @@
         <a href={% url index %}>Index</a>
         {% if not active_user %}<a href={% url login %}>Login</a>{% endif %}
         {% if is_admin %}<a href={% url article_admin_list %}>Manage articles</a>{% endif %}
+        {% if is_admin %}<a href={% url blog_admin_update %}>Manage blog</a>{% endif %}
         {% if is_admin %}<a href={% url article_admin_create %}>Add article</a>{% endif %}
         {% if active_user %}<a href={% url logout %}>Logout</a>{% endif %}
     </div>

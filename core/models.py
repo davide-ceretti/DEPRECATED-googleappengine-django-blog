@@ -19,3 +19,4 @@ class Blog(db.Model):
 
 class Article(db.Model):
     title = db.StringProperty(required=True)
+    body = db.StringProperty(required=True)

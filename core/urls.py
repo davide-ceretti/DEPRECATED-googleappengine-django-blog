@@ -11,6 +11,7 @@ urlpatterns = patterns(
     url(r'^logout/$', views.LoginView.as_view(), name='logout'),
     url(r'^add/$', views.ArticleAdminCreateView.as_view(), name='article_admin_create'),
     url(r'^manage-articles/$', views.ArticleAdminListView.as_view(), name='article_admin_list'),
+    url(r'^manage-blog/$', views.BlogAdminUpdateView.as_view(), name='blog_admin_update'),
 )
 
 
