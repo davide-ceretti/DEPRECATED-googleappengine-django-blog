@@ -36,6 +36,32 @@ class TestIndexPage(AppEngineTestCase):
         self.assertContains(resp, "title_article_one")
         self.assertContains(resp, "title_article_two")
 
+    def test_visible_menu_when_admin(self):
+        self.users_login('admin@localhost', is_admin=True)
+        resp = self.client.get(self.url)
+        self.assertContains(resp, "Index")
+        self.assertContains(resp, "Manage articles")
+        self.assertContains(resp, "Add article")
+        self.assertContains(resp, "Logout")
+        self.assertNotContains(resp, "Login")
+
+    def test_visible_menu_when_not_admin(self):
+        self.users_login('user@localhost', is_admin=False)
+        resp = self.client.get(self.url)
+        self.assertContains(resp, "Index")
+        self.assertContains(resp, "Logout")
+        self.assertNotContains(resp, "Login")
+        self.assertNotContains(resp, "Manage articles")
+        self.assertNotContains(resp, "Add article")
+
+    def test_visible_menu_when_not_authenticated(self):
+        resp = self.client.get(self.url)
+        self.assertContains(resp, "Index")
+        self.assertContains(resp, "Login")
+        self.assertNotContains(resp, "Manage articles")
+        self.assertNotContains(resp, "Add article")
+        self.assertNotContains(resp, "Logout")
+
 
 class TestManageArticlesPage(AppEngineTestCase):
     url = reverse('article_admin_list')

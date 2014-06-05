@@ -18,6 +18,8 @@ class BlogMixin(object):
         blog = Blog.get_unique()
         context.update({
             'blog': blog,
+            'active_user': users.get_current_user(),
+            'is_admin': users.is_current_user_admin()
         })
         return context
 
