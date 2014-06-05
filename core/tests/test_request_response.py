@@ -95,18 +95,16 @@ class TestArticleCreatePage(AppEngineTestCase):
         self.users_login('admin@localhost', is_admin=True)
         data = {'title': 'article_title'}
 
-        resp = self.client.post(self.url, data)
+        self.client.post(self.url, data)
 
-        self.assertContains(resp, 'This field is required')
         self.assertEqual(Article.all().count(), 0)
 
     def test_post_invalid_missing_title(self):
         self.users_login('admin@localhost', is_admin=True)
         data = {'body': 'article_body'}
 
-        resp = self.client.post(self.url, data)
+        self.client.post(self.url, data)
 
-        self.assertContains(resp, 'This field is required')
         self.assertEqual(Article.all().count(), 0)
 
 
@@ -114,7 +112,7 @@ class TestUpdateBlog(AppEngineTestCase):
     url = reverse('blog_admin_update')
 
     def setUp(self):
-        Blog(title='my_blog_title').put()
+        Blog(title='my_blog_title', tagline='tagline').put()
 
     def test_user_not_admin(self):
         self.users_login('user@localhost', is_admin=False)
@@ -127,23 +125,23 @@ class TestUpdateBlog(AppEngineTestCase):
 
     def test_post_no_title(self):
         self.users_login('admin@localhost', is_admin=True)
-        data = {'tagline': '123'}
+        data = {'tagline': 'new_tagline'}
 
-        resp = self.client.post(self.url, data)
+        self.client.post(self.url, data)
 
-        self.assertContains(resp, 'This field is required')
         self.assertEqual(Blog.get_unique().title, 'my_blog_title')
+        self.assertEqual(Blog.get_unique().tagline, 'tagline')
 
     def test_post_valid(self):
         self.users_login('admin@localhost', is_admin=True)
-        data = {'title': 'new_blog_title', 'tagline': 'my_tagline'}
+        data = {'title': 'new_blog_title', 'tagline': 'new_tagline'}
 
         resp = self.client.post(self.url, data)
 
         blog = Blog.get_unique()
         self.assertRedirects(resp, reverse('index'))
         self.assertEqual(blog.title, 'new_blog_title')
-        self.assertEqual(blog.tagline, 'my_tagline')
+        self.assertEqual(blog.tagline, 'new_tagline')
 
 
 class TestDeleteArticle(AppEngineTestCase):
@@ -218,9 +216,8 @@ class TestUpdateArticle(AppEngineTestCase):
         self.users_login('admin@localhost', is_admin=True)
         data = {'title': 'new_title'}
 
-        resp = self.client.post(self.url, data)
+        self.client.post(self.url, data)
 
-        self.assertContains(resp, 'This field is required')
         article = Article.get(self.key)
         self.assertEqual(article.title, 'title123')
         self.assertEqual(article.body, 'body123')
@@ -229,9 +226,8 @@ class TestUpdateArticle(AppEngineTestCase):
         self.users_login('admin@localhost', is_admin=True)
         data = {'body': 'new_body'}
 
-        resp = self.client.post(self.url, data)
+        self.client.post(self.url, data)
 
-        self.assertContains(resp, 'This field is required')
         article = Article.get(self.key)
         self.assertEqual(article.title, 'title123')
         self.assertEqual(article.body, 'body123')

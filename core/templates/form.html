@@ -1,9 +1,17 @@
 {% extends 'base.html' %}
 
+{% load fields %}
+
 {% block content %}
-<form method='post'>
+<div class="pure-input-1">
+<form class="pure-form pure-form-stacked" method='post'>
     {% csrf_token %}
-    {{ form.as_p }}
-    <input type='submit' value='Submit' />
+    {% for field in form %}
+        <div class="django-field">
+            {{ field|empower:"pure-input-1" }}
+        </div>
+    {% endfor %}
+    <input class="pure-button pure-button-primary" type='submit' value='Submit' />
 </form>
+</div>
 {% endblock %}

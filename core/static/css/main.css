@@ -1,3 +1,5 @@
+/* COMMON */
+
 * {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -16,6 +18,8 @@ a:hover, a:focus {
 h3 {
     font-weight: 100;
 }
+
+/* LAYOUT */
 
 #layout {
     padding: 0;
@@ -124,4 +128,29 @@ h3 {
         top: 0;
         bottom: 0;
     }
+}
+
+/* FORMS */
+
+.pure-button-primary {
+    background-color: #4C0000;
+}
+
+.pure-form textarea:focus {
+    border-color: #4C0000;
+}
+.pure-form input[type="text"]:focus {
+    border-color: #4C0000;
+}
+
+.pure-form input[type="text"] {
+    box-shadow: none;
+}
+
+.pure-form textarea {
+    box-shadow: none;
+}
+
+div.django-field {
+    padding-bottom: 1em;
 }
