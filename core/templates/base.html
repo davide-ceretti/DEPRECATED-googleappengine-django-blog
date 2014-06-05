@@ -8,7 +8,7 @@
 
 <body>
     <div id="header">
-        <h1>{{ blog.title }}</h1>
+        <h1 class="title">{{ blog.title }}</h1>
         <a href={% url index %}>Index</a>
         {% if not active_user %}<a href={% url login %}>Login</a>{% endif %}
         {% if is_admin %}<a href={% url article_admin_list %}>Manage articles</a>{% endif %}
