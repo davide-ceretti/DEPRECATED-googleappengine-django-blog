@@ -1,9 +1,9 @@
 from django import forms
 
-from core.models import Article, Blog
+from core.models import Article
 
 
-class ArticleCreateForm(forms.Form):
+class ArticleForm(forms.Form):
     title = forms.CharField(max_length=100)
     body = forms.CharField()
 
@@ -13,13 +13,18 @@ class ArticleCreateForm(forms.Form):
         body = data.get('body')
         Article(title=title, body=body).put()
 
+    @staticmethod
+    def update_article(article, data):
+        article.body = data.get('body')
+        article.title = data.get('title')
+        article.put()
 
-class BlogUpdateForm(forms.Form):
+
+class BlogForm(forms.Form):
     title = forms.CharField(max_length=100)
 
     @staticmethod
-    def update_blog(data):
+    def update_blog(blog, data):
         title = data.get('title')
-        blog = Blog.get_unique()
         blog.title = title
         blog.put()

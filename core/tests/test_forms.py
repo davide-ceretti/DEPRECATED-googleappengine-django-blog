@@ -4,29 +4,30 @@ Unit test forms methods and properties.
 from ndbtestcase import AppEngineTestCase
 
 from core.models import Article, Blog
-from core.forms import ArticleCreateForm, BlogUpdateForm
+from core.forms import ArticleForm, BlogForm
 
 
-class TestArticleCreateForm(AppEngineTestCase):
+class TestArticleForm(AppEngineTestCase):
     def test_create_article(self):
         data = {
             'title': 'article_title',
             'body': 'article_body'
         }
 
-        ArticleCreateForm.create_article(data)
+        ArticleForm.create_article(data)
 
         self.assertEqual(Article.all().count(), 1)
 
 
-class TestBlogUpdateForm(AppEngineTestCase):
+class TestBlogForm(AppEngineTestCase):
     def test_update_blog(self):
-        Blog(title='old_title').put()
+        blog = Blog(title='old_title')
+        key = blog.put()
         data = {
             'title': 'new_title',
         }
 
-        BlogUpdateForm.update_blog(data)
+        BlogForm.update_blog(blog, data)
 
-        blog = Blog.get_unique()
+        blog = Blog.get(key)
         self.assertEqual(blog.title, 'new_title')

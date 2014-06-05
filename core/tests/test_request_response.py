@@ -179,10 +179,10 @@ class TestUpdateBlog(AppEngineTestCase):
         resp = self.client.get(self.url)
         self.assertEqual(resp.status_code, 302)
 
-    def test_200_and_form_in_page(self):
+    def test_200_and_initial_data(self):
         self.users_login('admin@localhost', is_admin=True)
         resp = self.client.get(self.url)
-        self.assertContains(resp, "Title")
+        self.assertContains(resp, "my_blog_title")
 
     def test_post_no_title(self):
         self.users_login('admin@localhost', is_admin=True)
@@ -245,3 +245,60 @@ class TestDeleteArticle(AppEngineTestCase):
 
         self.assertRedirects(resp, reverse('article_admin_list'))
         self.assertEqual(Article.all().count(), 0)
+
+
+class TestUpdateArticle(AppEngineTestCase):
+    def setUp(self):
+        Blog(title="my_blog_title").put()
+        self.key = Article(title='title123', body='body123').put()
+        self.url = reverse(
+            'article_admin_update',
+            kwargs={'id': self.key.id()}
+        )
+
+    def test_user_not_admin(self):
+        self.users_login('user@localhost', is_admin=False)
+        resp = self.client.get(self.url)
+        self.assertEqual(resp.status_code, 302)
+
+    def test_user_not_authenticated(self):
+        resp = self.client.get(self.url)
+        self.assertEqual(resp.status_code, 302)
+
+    def test_200_and_form_contains_article_title_and_body(self):
+        self.users_login('admin@localhost', is_admin=True)
+        resp = self.client.get(self.url)
+        self.assertContains(resp, "title123")
+        self.assertContains(resp, "body123")
+
+    def test_post_no_body(self):
+        self.users_login('admin@localhost', is_admin=True)
+        data = {'title': 'new_title'}
+
+        resp = self.client.post(self.url, data)
+
+        self.assertContains(resp, 'This field is required')
+        article = Article.get(self.key)
+        self.assertEqual(article.title, 'title123')
+        self.assertEqual(article.body, 'body123')
+
+    def test_post_no_title(self):
+        self.users_login('admin@localhost', is_admin=True)
+        data = {'body': 'new_body'}
+
+        resp = self.client.post(self.url, data)
+
+        self.assertContains(resp, 'This field is required')
+        article = Article.get(self.key)
+        self.assertEqual(article.title, 'title123')
+        self.assertEqual(article.body, 'body123')
+
+    def test_post_valid(self):
+        self.users_login('admin@localhost', is_admin=True)
+        data = {'body': 'new_body', 'title': 'new_title'}
+
+        self.client.post(self.url, data)
+
+        article = Article.get(self.key)
+        self.assertEqual(article.title, 'new_title')
+        self.assertEqual(article.body, 'new_body')

@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect
 from google.appengine.api import users
 
 from core.models import Article, Blog
-from core.forms import ArticleCreateForm, BlogUpdateForm
+from core.forms import ArticleForm, BlogForm
 
 
 class BlogMixin(object):
@@ -86,7 +86,7 @@ class ArticleAdminCreateView(AdminRequiredMixin, BlogMixin, FormView):
     Administration page to create articles.
     """
     template_name = 'article_admin_create.html'
-    form_class = ArticleCreateForm
+    form_class = ArticleForm
 
     def get_after_login_url(self):
         return reverse('article_admin_create')
@@ -104,7 +104,7 @@ class BlogAdminUpdateView(AdminRequiredMixin, BlogMixin, FormView):
     Administration page to update blog settings.
     """
     template_name = 'blog_admin_update.html'
-    form_class = BlogUpdateForm
+    form_class = BlogForm
 
     def get_after_login_url(self):
         return reverse('blog_admin_update')
@@ -112,8 +112,15 @@ class BlogAdminUpdateView(AdminRequiredMixin, BlogMixin, FormView):
     def get_success_url(self):
         return reverse('index')
 
+    def get_initial(self):
+        return {'title': self.get_object().title}
+
+    def get_object(self):
+        return Blog.get_unique()
+
     def form_valid(self, form):
-        self.form_class.update_blog(data=form.cleaned_data)
+        blog = self.get_object()
+        self.form_class.update_blog(blog, data=form.cleaned_data)
         return super(BlogAdminUpdateView, self).form_valid(form)
 
 
@@ -133,5 +140,36 @@ class ArticleAdminDeleteView(AdminRequiredMixin, BlogMixin, DeleteView):
         return Article.get_by_id_or_404(obj_id)
 
     def get(self, request, *args, **kwargs):
-        # For semplicity we delete on get requests
+        # For simplicity we delete on get requests
         return self.delete(request, *args, **kwargs)
+
+
+class ArticleAdminUpdateView(AdminRequiredMixin, BlogMixin, FormView):
+    """
+    Administration page to update articles.
+    """
+    template_name = 'article_admin_update.html'
+    form_class = ArticleForm
+
+    def get_after_login_url(self):
+        return reverse('article_admin_list')
+
+    def get_success_url(self):
+        return reverse('index')
+
+    def get_object(self):
+        obj_id = self.kwargs.get('id', None)
+        return Article.get_by_id_or_404(obj_id)
+
+    def get_initial(self):
+        article = self.get_object()
+        data = {
+            'title': article.title,
+            'body': article.body
+        }
+        return data
+
+    def form_valid(self, form):
+        article = self.get_object()
+        self.form_class.update_article(article, data=form.cleaned_data)
+        return super(ArticleAdminUpdateView, self).form_valid(form)

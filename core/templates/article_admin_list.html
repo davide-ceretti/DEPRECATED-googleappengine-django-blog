@@ -2,7 +2,11 @@
 
 {% block content %}
     {% for object in object_list %}
-        <li>{{ object.title }} - <a href="{% url article_admin_delete object.key.id %}">Delete</a></li>
+        <li>
+        {{ object.title }} -
+        <a href="{% url article_admin_update object.key.id %}">Edit</a> -
+        <a href="{% url article_admin_delete object.key.id %}">Delete</a>
+        </li>
     {% empty %}
         <p>This blog looks empty!</p>
     {% endfor %}

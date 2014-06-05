@@ -13,6 +13,7 @@ urlpatterns = patterns(
     url(r'^manage-articles/$', views.ArticleAdminListView.as_view(), name='article_admin_list'),
     url(r'^manage-blog/$', views.BlogAdminUpdateView.as_view(), name='blog_admin_update'),
     url(r'^delete-article/(?P<id>[\d]+)/$', views.ArticleAdminDeleteView.as_view(), name='article_admin_delete'),
+    url(r'^update-article/(?P<id>[\d]+)/$', views.ArticleAdminUpdateView.as_view(), name='article_admin_update'),
 )
 
 
