@@ -85,7 +85,7 @@ class ArticleAdminCreateView(AdminRequiredMixin, BlogMixin, FormView):
     """
     Administration page to create articles.
     """
-    template_name = 'article_admin_create.html'
+    template_name = 'form.html'
     form_class = ArticleForm
 
     def get_after_login_url(self):
@@ -103,7 +103,7 @@ class BlogAdminUpdateView(AdminRequiredMixin, BlogMixin, FormView):
     """
     Administration page to update blog settings.
     """
-    template_name = 'blog_admin_update.html'
+    template_name = 'form.html'
     form_class = BlogForm
 
     def get_after_login_url(self):
@@ -148,7 +148,7 @@ class ArticleAdminUpdateView(AdminRequiredMixin, BlogMixin, FormView):
     """
     Administration page to update articles.
     """
-    template_name = 'article_admin_update.html'
+    template_name = 'form.html'
     form_class = ArticleForm
 
     def get_after_login_url(self):

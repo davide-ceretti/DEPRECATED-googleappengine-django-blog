@@ -12,16 +12,16 @@ class Thing(ndb.Model):
 
 class ExampleTestCase(AppEngineTestCase):
     def setUp(self):
-        thing = Thing(stuff="One")
+        thing = Thing(stuff='One')
         thing.put()
 
     def test_thing_one(self):
-        thing = Thing(stuff="Two")
+        thing = Thing(stuff='Two')
         thing.put()
         self.assertEquals(Thing.query().count(), 2)
 
     def test_thing_two(self):
-        thing = Thing(stuff="Three")
+        thing = Thing(stuff='Three')
         thing.put()
         self.assertEquals(Thing.query().count(), 2)
 

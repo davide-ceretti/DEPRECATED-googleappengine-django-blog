@@ -12,65 +12,58 @@ class TestIndexPage(AppEngineTestCase):
     url = reverse('index')
 
     def setUp(self):
-        Blog(title="my_blog_title").put()
-
-    def test_correct_template_loaded(self):
-        resp = self.client.get(self.url)
-        self.assertTemplateUsed(
-            template_name="index.html",
-            response=resp
-        )
+        Blog(title='my_blog_title').put()
 
     def test_200_and_name_in_page(self):
         resp = self.client.get(self.url)
-        self.assertContains(resp, "my_blog_title")
+        self.assertContains(resp, 'my_blog_title')
 
     def test_no_articles(self):
         resp = self.client.get(self.url)
-        self.assertContains(resp, "This blog looks empty!")
+        self.assertContains(resp, 'This blog looks empty!')
 
     def test_with_articles(self):
-        Article(title="title_article_one", body="body_one").put()
-        Article(title="title_article_two",  body="body_two").put()
+        Article(title='title_article_one', body='body_one').put()
+        Article(title='title_article_two',  body='body_two').put()
         resp = self.client.get(self.url)
-        self.assertContains(resp, "title_article_one")
-        self.assertContains(resp, "title_article_two")
+        self.assertContains(resp, 'title_article_one')
+        self.assertContains(resp, 'title_article_two')
 
     def test_visible_menu_when_admin(self):
         self.users_login('admin@localhost', is_admin=True)
         resp = self.client.get(self.url)
-        self.assertContains(resp, "Index")
-        self.assertContains(resp, "Manage articles")
-        self.assertContains(resp, "Manage blog")
-        self.assertContains(resp, "Add article")
-        self.assertContains(resp, "Logout")
-        self.assertNotContains(resp, "Login")
+        self.assertContains(resp, 'Index')
+        self.assertContains(resp, 'Manage articles')
+        self.assertContains(resp, 'Manage blog')
+        self.assertContains(resp, 'Add article')
+        self.assertContains(resp, 'Logout')
+        self.assertNotContains(resp, 'Login')
 
     def test_visible_menu_when_not_admin(self):
         self.users_login('user@localhost', is_admin=False)
         resp = self.client.get(self.url)
-        self.assertContains(resp, "Index")
-        self.assertContains(resp, "Logout")
-        self.assertNotContains(resp, "Login")
-        self.assertNotContains(resp, "Manage articles")
-        self.assertNotContains(resp, "Manage blog")
-        self.assertNotContains(resp, "Add article")
+        self.assertContains(resp, 'Index')
+        self.assertContains(resp, 'Logout')
+        self.assertNotContains(resp, 'Login')
+        self.assertNotContains(resp, 'Manage articles')
+        self.assertNotContains(resp, 'Manage blog')
+        self.assertNotContains(resp, 'Add article')
 
     def test_visible_menu_when_not_authenticated(self):
         resp = self.client.get(self.url)
-        self.assertContains(resp, "Index")
-        self.assertContains(resp, "Login")
-        self.assertNotContains(resp, "Manage articles")
-        self.assertNotContains(resp, "Manage blog")
-        self.assertNotContains(resp, "Add article")
-        self.assertNotContains(resp, "Logout")
+        self.assertContains(resp, 'Index')
+        self.assertContains(resp, 'Login')
+        self.assertNotContains(resp, 'Manage articles')
+        self.assertNotContains(resp, 'Manage blog')
+        self.assertNotContains(resp, 'Add article')
+        self.assertNotContains(resp, 'Logout')
 
 
 class TestManageArticlesPage(AppEngineTestCase):
     url = reverse('article_admin_list')
 
     def setUp(self):
-        Blog(title="my_blog_title").put()
+        Blog(title='my_blog_title').put()
 
     def test_user_not_admin(self):
         self.users_login('user@localhost', is_admin=False)
@@ -85,31 +78,31 @@ class TestManageArticlesPage(AppEngineTestCase):
         self.users_login('admin@localhost', is_admin=True)
         resp = self.client.get(self.url)
         self.assertTemplateUsed(
-            template_name="article_admin_list.html",
+            template_name='article_admin_list.html',
             response=resp
         )
 
     def test_no_articles(self):
         self.users_login('admin@localhost', is_admin=True)
         resp = self.client.get(self.url)
-        self.assertContains(resp, "This blog looks empty!")
+        self.assertContains(resp, 'This blog looks empty!')
 
     def test_with_articles(self):
         self.users_login('admin@localhost', is_admin=True)
-        Article(title="title_article_one", body="body_one").put()
-        Article(title="title_article_two",  body="body_two").put()
+        Article(title='title_article_one', body='body_one').put()
+        Article(title='title_article_two',  body='body_two').put()
 
         resp = self.client.get(self.url)
 
-        self.assertContains(resp, "title_article_one")
-        self.assertContains(resp, "title_article_two")
+        self.assertContains(resp, 'title_article_one')
+        self.assertContains(resp, 'title_article_two')
 
 
 class TestArticleCreatePage(AppEngineTestCase):
     url = reverse('article_admin_create')
 
     def setUp(self):
-        Blog(title="my_blog_title").put()
+        Blog(title='my_blog_title').put()
 
     def test_user_not_admin(self):
         self.users_login('user@localhost', is_admin=False)
@@ -120,18 +113,10 @@ class TestArticleCreatePage(AppEngineTestCase):
         resp = self.client.get(self.url)
         self.assertEqual(resp.status_code, 302)
 
-    def test_correct_template_loaded(self):
-        self.users_login('admin@localhost', is_admin=True)
-        resp = self.client.get(self.url)
-        self.assertTemplateUsed(
-            template_name="article_admin_create.html",
-            response=resp
-        )
-
     def test_200_and_name_in_page(self):
         self.users_login('admin@localhost', is_admin=True)
         resp = self.client.get(self.url)
-        self.assertContains(resp, "my_blog_title")
+        self.assertContains(resp, 'my_blog_title')
 
     def test_post_valid(self):
         self.users_login('admin@localhost', is_admin=True)
@@ -168,7 +153,7 @@ class TestUpdateBlog(AppEngineTestCase):
     url = reverse('blog_admin_update')
 
     def setUp(self):
-        Blog(title="my_blog_title").put()
+        Blog(title='my_blog_title').put()
 
     def test_user_not_admin(self):
         self.users_login('user@localhost', is_admin=False)
@@ -182,7 +167,7 @@ class TestUpdateBlog(AppEngineTestCase):
     def test_200_and_initial_data(self):
         self.users_login('admin@localhost', is_admin=True)
         resp = self.client.get(self.url)
-        self.assertContains(resp, "my_blog_title")
+        self.assertContains(resp, 'my_blog_title')
 
     def test_post_no_title(self):
         self.users_login('admin@localhost', is_admin=True)
@@ -205,7 +190,7 @@ class TestUpdateBlog(AppEngineTestCase):
 
 class TestDeleteArticle(AppEngineTestCase):
     def setUp(self):
-        Blog(title="my_blog_title").put()
+        Blog(title='my_blog_title').put()
 
     def test_user_not_admin(self):
         Article(title='title', body='body').put()
@@ -249,7 +234,7 @@ class TestDeleteArticle(AppEngineTestCase):
 
 class TestUpdateArticle(AppEngineTestCase):
     def setUp(self):
-        Blog(title="my_blog_title").put()
+        Blog(title='my_blog_title').put()
         self.key = Article(title='title123', body='body123').put()
         self.url = reverse(
             'article_admin_update',
@@ -268,8 +253,8 @@ class TestUpdateArticle(AppEngineTestCase):
     def test_200_and_form_contains_article_title_and_body(self):
         self.users_login('admin@localhost', is_admin=True)
         resp = self.client.get(self.url)
-        self.assertContains(resp, "title123")
-        self.assertContains(resp, "body123")
+        self.assertContains(resp, 'title123')
+        self.assertContains(resp, 'body123')
 
     def test_post_no_body(self):
         self.users_login('admin@localhost', is_admin=True)

@@ -14,13 +14,13 @@ class TestBlog(AppEngineTestCase):
             Blog.get_unique()
 
     def test_get_unique_multiple_blogs(self):
-        Blog(title="blog_one").put()
-        Blog(title="blog_two").put()
+        Blog(title='blog_one').put()
+        Blog(title='blog_two').put()
         with self.assertRaises(MultipleObjectsReturned):
             Blog.get_unique()
 
     def test_get_unique_one_blog(self):
-        blog = Blog(title="blog_one")
+        blog = Blog(title='blog_one')
         blog.put()
 
         result = Blog.get_unique()
