@@ -1,4 +1,8 @@
-from google.appengine.ext.db import djangoforms
+"""
+NOTE: The google.appengine.ext.db.djangoforms module is not provided
+with the Python 2.7. Therefore we forked their djangoforms
+"""
+from lib import djangoforms
 
 from core.models import Article, Blog
 
