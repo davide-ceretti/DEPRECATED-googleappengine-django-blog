@@ -1,4 +1,6 @@
-from django.views.generic import ListView, FormView, View, DeleteView
+from django.views.generic import (
+    ListView, View, DeleteView, UpdateView, CreateView
+)
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 
@@ -81,7 +83,7 @@ class ArticleAdminListView(AdminRequiredMixin, BlogMixin, ListView):
         return reverse('article_admin_list')
 
 
-class ArticleAdminCreateView(AdminRequiredMixin, BlogMixin, FormView):
+class ArticleAdminCreateView(AdminRequiredMixin, BlogMixin, CreateView):
     """
     Administration page to create articles.
     """
@@ -94,12 +96,8 @@ class ArticleAdminCreateView(AdminRequiredMixin, BlogMixin, FormView):
     def get_success_url(self):
         return reverse('index')
 
-    def form_valid(self, form):
-        self.form_class.create_article(data=form.cleaned_data)
-        return super(ArticleAdminCreateView, self).form_valid(form)
 
-
-class BlogAdminUpdateView(AdminRequiredMixin, BlogMixin, FormView):
+class BlogAdminUpdateView(AdminRequiredMixin, BlogMixin, UpdateView):
     """
     Administration page to update blog settings.
     """
@@ -112,16 +110,8 @@ class BlogAdminUpdateView(AdminRequiredMixin, BlogMixin, FormView):
     def get_success_url(self):
         return reverse('index')
 
-    def get_initial(self):
-        return {'title': self.get_object().title}
-
     def get_object(self):
         return Blog.get_unique()
-
-    def form_valid(self, form):
-        blog = self.get_object()
-        self.form_class.update_blog(blog, data=form.cleaned_data)
-        return super(BlogAdminUpdateView, self).form_valid(form)
 
 
 class ArticleAdminDeleteView(AdminRequiredMixin, BlogMixin, DeleteView):
@@ -144,7 +134,7 @@ class ArticleAdminDeleteView(AdminRequiredMixin, BlogMixin, DeleteView):
         return self.delete(request, *args, **kwargs)
 
 
-class ArticleAdminUpdateView(AdminRequiredMixin, BlogMixin, FormView):
+class ArticleAdminUpdateView(AdminRequiredMixin, BlogMixin, UpdateView):
     """
     Administration page to update articles.
     """
@@ -160,16 +150,3 @@ class ArticleAdminUpdateView(AdminRequiredMixin, BlogMixin, FormView):
     def get_object(self):
         obj_id = self.kwargs.get('id', None)
         return Article.get_by_id_or_404(obj_id)
-
-    def get_initial(self):
-        article = self.get_object()
-        data = {
-            'title': article.title,
-            'body': article.body
-        }
-        return data
-
-    def form_valid(self, form):
-        article = self.get_object()
-        self.form_class.update_article(article, data=form.cleaned_data)
-        return super(ArticleAdminUpdateView, self).form_valid(form)
