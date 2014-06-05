@@ -67,7 +67,7 @@ class IndexView(BlogMixin, ListView):
     all the articles.
     """
     template_name = 'index.html'
-    queryset = Article.all()
+    queryset = Article.all().order('-created_at')
 
 
 class ArticleAdminListView(AdminRequiredMixin, BlogMixin, ListView):
@@ -75,7 +75,7 @@ class ArticleAdminListView(AdminRequiredMixin, BlogMixin, ListView):
     Administration page to view, update, delete articles.
     """
     template_name = 'article_admin_list.html'
-    queryset = Article.all()
+    queryset = Article.all().order('-created_at')
 
     def get_after_login_url(self):
         return reverse('article_admin_list')

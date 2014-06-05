@@ -22,12 +22,19 @@ class TestIndexPage(AppEngineTestCase):
         resp = self.client.get(self.url)
         self.assertContains(resp, 'This blog looks empty!')
 
-    def test_with_articles(self):
+    def test_articles_title_in_page(self):
         Article(title='title_article_one', body='body_one').put()
         Article(title='title_article_two',  body='body_two').put()
         resp = self.client.get(self.url)
         self.assertContains(resp, 'title_article_one')
         self.assertContains(resp, 'title_article_two')
+
+    def test_articles_body_in_page(self):
+        Article(title='title_article_one', body='body_one').put()
+        Article(title='title_article_two',  body='body_two').put()
+        resp = self.client.get(self.url)
+        self.assertContains(resp, 'body_one')
+        self.assertContains(resp, 'body_two')
 
     def test_visible_menu_when_admin(self):
         self.users_login('admin@localhost', is_admin=True)

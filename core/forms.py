@@ -1,11 +1,10 @@
 from django import forms
-
 from core.models import Article
 
 
 class ArticleForm(forms.Form):
     title = forms.CharField(max_length=100)
-    body = forms.CharField()
+    body = forms.CharField(widget=forms.Textarea)
 
     @staticmethod
     def create_article(data):

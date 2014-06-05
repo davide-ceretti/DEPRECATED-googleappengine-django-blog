@@ -25,7 +25,8 @@ class Blog(db.Model):
 
 class Article(db.Model):
     title = db.StringProperty(required=True)
-    body = db.StringProperty(required=True)
+    body = db.TextProperty(required=True)
+    created_at = db.DateTimeProperty(auto_now=True)
 
     @staticmethod
     def get_by_id_or_404(obj_id):

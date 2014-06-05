@@ -2,7 +2,9 @@
 
 {% block content %}
     {% for object in object_list %}
-        <li>{{ object.title }}</li>
+        <h2>{{ object.title }}</h2>
+        <h3>{{ object.created_at }}</h3>
+        <p>{{ object.body }}</p>
     {% empty %}
         <p>This blog looks empty!</p>
     {% endfor %}
