@@ -1,3 +1,6 @@
+"""
+Examples of how to use the AppEngineTestCase.
+"""
 from google.appengine.ext import ndb
 
 from ndbtestcase import AppEngineTestCase
@@ -8,8 +11,6 @@ class Thing(ndb.Model):
 
 
 class ExampleTestCase(AppEngineTestCase):
-    """Example App Engine testcase"""
-
     def setUp(self):
         thing = Thing(stuff="One")
         thing.put()

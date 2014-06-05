@@ -6,8 +6,11 @@ from core import views
 
 urlpatterns = patterns(
     'core.views',
-    url(r'^$', views.ArticleListView.as_view(), name='article_list'),
-    url(r'^add/$', views.ArticleCreateView.as_view(), name='article_create'),
+    url(r'^$', views.IndexView.as_view(), name='index'),
+    url(r'^login/$', views.LoginView.as_view(), name='login'),
+    url(r'^logout/$', views.LoginView.as_view(), name='logout'),
+    url(r'^add/$', views.ArticleAdminCreateView.as_view(), name='article_admin_create'),
+    url(r'^manage-articles/$', views.ArticleAdminListView.as_view(), name='article_admin_list'),
 )
 
 

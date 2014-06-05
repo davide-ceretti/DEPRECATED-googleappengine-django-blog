@@ -1,3 +1,6 @@
+"""
+Unit test forms methods and properties.
+"""
 from ndbtestcase import AppEngineTestCase
 
 from core.models import Article

@@ -1,3 +1,6 @@
+"""
+Unit test models methods and properties.
+"""
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 
 from ndbtestcase import AppEngineTestCase
