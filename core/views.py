@@ -33,7 +33,7 @@ class AdminRequiredMixin(object):
     authenticated or they are not administrators
     """
     def get_after_login_url(self):
-        raise NotImplementedError
+        return reverse('index')
 
     def dispatch(self, request, *args, **kwargs):
         if not users.is_current_user_admin():
@@ -72,26 +72,12 @@ class IndexView(BlogMixin, ListView):
     queryset = Article.all().order('-created_at')
 
 
-class ArticleAdminListView(AdminRequiredMixin, BlogMixin, ListView):
-    """
-    Administration page to view, update, delete articles.
-    """
-    template_name = 'article_admin_list.html'
-    queryset = Article.all().order('-created_at')
-
-    def get_after_login_url(self):
-        return reverse('article_admin_list')
-
-
 class ArticleAdminCreateView(AdminRequiredMixin, BlogMixin, CreateView):
     """
     Administration page to create articles.
     """
     template_name = 'form.html'
     form_class = ArticleForm
-
-    def get_after_login_url(self):
-        return reverse('article_admin_create')
 
     def get_success_url(self):
         return reverse('index')
@@ -104,9 +90,6 @@ class BlogAdminUpdateView(AdminRequiredMixin, BlogMixin, UpdateView):
     template_name = 'form.html'
     form_class = BlogForm
 
-    def get_after_login_url(self):
-        return reverse('blog_admin_update')
-
     def get_success_url(self):
         return reverse('index')
 
@@ -118,12 +101,8 @@ class ArticleAdminDeleteView(AdminRequiredMixin, BlogMixin, DeleteView):
     """
     Delete the article with a given key
     """
-
-    def get_after_login_url(self):
-        return reverse('article_admin_list')
-
     def get_success_url(self):
-        return reverse('article_admin_list')
+        return reverse('index')
 
     def get_object(self):
         obj_id = self.kwargs.get('id', None)
@@ -140,9 +119,6 @@ class ArticleAdminUpdateView(AdminRequiredMixin, BlogMixin, UpdateView):
     """
     template_name = 'form.html'
     form_class = ArticleForm
-
-    def get_after_login_url(self):
-        return reverse('article_admin_list')
 
     def get_success_url(self):
         return reverse('index')

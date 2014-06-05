@@ -16,4 +16,4 @@ class ArticleForm(djangoforms.ModelForm):
 class BlogForm(djangoforms.ModelForm):
     class Meta:
         model = Blog
-        fields = ('title',)
+        fields = ('title', 'tagline')
