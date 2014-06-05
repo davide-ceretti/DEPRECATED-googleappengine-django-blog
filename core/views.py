@@ -1,6 +1,7 @@
-from django.views.generic import ListView, FormView, View
+from django.views.generic import ListView, FormView, View, DeleteView
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
+
 from google.appengine.api import users
 
 from core.models import Article, Blog
@@ -32,11 +33,12 @@ class AdminRequiredMixin(object):
     def get_after_login_url(self):
         raise NotImplementedError
 
-    def dispatch(self, request):
+    def dispatch(self, request, *args, **kwargs):
         if not users.is_current_user_admin():
             url = users.create_login_url(self.get_after_login_url())
             return HttpResponseRedirect(url)
-        return super(AdminRequiredMixin, self).dispatch(request)
+        return super(AdminRequiredMixin, self).dispatch(
+            request, *args, **kwargs)
 
 
 class LoginView(View):
@@ -113,3 +115,23 @@ class BlogAdminUpdateView(AdminRequiredMixin, BlogMixin, FormView):
     def form_valid(self, form):
         self.form_class.update_blog(data=form.cleaned_data)
         return super(BlogAdminUpdateView, self).form_valid(form)
+
+
+class ArticleAdminDeleteView(AdminRequiredMixin, BlogMixin, DeleteView):
+    """
+    Delete the article with a given key
+    """
+
+    def get_after_login_url(self):
+        return reverse('article_admin_list')
+
+    def get_success_url(self):
+        return reverse('article_admin_list')
+
+    def get_object(self):
+        obj_id = self.kwargs.get('id', None)
+        return Article.get_by_id_or_404(obj_id)
+
+    def get(self, request, *args, **kwargs):
+        # For semplicity we delete on get requests
+        return self.delete(request, *args, **kwargs)

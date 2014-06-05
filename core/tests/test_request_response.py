@@ -201,3 +201,47 @@ class TestUpdateBlog(AppEngineTestCase):
 
         self.assertRedirects(resp, reverse('index'))
         self.assertEqual(Blog.get_unique().title, 'new_blog_title')
+
+
+class TestDeleteArticle(AppEngineTestCase):
+    def setUp(self):
+        Blog(title="my_blog_title").put()
+
+    def test_user_not_admin(self):
+        Article(title='title', body='body').put()
+        self.users_login('user@localhost', is_admin=False)
+        url = reverse('article_admin_delete', kwargs={'id': 1})
+
+        resp = self.client.get(url)
+
+        self.assertEqual(resp.status_code, 302)
+        self.assertEqual(Article.all().count(), 1)
+
+    def test_user_not_authenticated(self):
+        Article(title='title', body='body').put()
+        url = reverse('article_admin_delete', kwargs={'id': 1})
+
+        resp = self.client.get(url)
+
+        self.assertEqual(resp.status_code, 302)
+        self.assertEqual(Article.all().count(), 1)
+
+    def test_article_does_not_exist(self):
+        Article(key_name='randomkey', title='title', body='body').put()
+        self.users_login('admin@localhost', is_admin=True)
+        url = reverse('article_admin_delete', kwargs={'id': 1})
+
+        resp = self.client.get(url)
+
+        self.assertEqual(resp.status_code, 404)
+        self.assertEqual(Article.all().count(), 1)
+
+    def test_article_exist(self):
+        key = Article(title='title', body='body').put()
+        self.users_login('admin@localhost', is_admin=True)
+        url = reverse('article_admin_delete', kwargs={'id': key.id()})
+
+        resp = self.client.get(url)
+
+        self.assertRedirects(resp, reverse('article_admin_list'))
+        self.assertEqual(Article.all().count(), 0)
