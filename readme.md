@@ -6,6 +6,8 @@ I'm using the Django Google App Engine integration (https://github.com/potatolon
 
 The blog is currently deployed at http://dav-ceretti.appspot.com/.
 
+Note: in order to make the application work correctly you need a Blog record in the datastore. At the moment you are supposed to add it manually by using the shell or the dev engine page (Issue raised https://github.com/davide-ceretti/googleappengine-django-blog/issues/3).
+
 ## System Requirements
 
 Python 2.7
