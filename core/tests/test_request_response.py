@@ -8,16 +8,28 @@ from django.core.urlresolvers import reverse
 from core.models import Blog, Article
 
 
+def create_blog(**kwargs):
+    """
+    Helper function to create a blog in tests
+    """
+    default_kwargs = {
+        'title': 'blog_title',
+        'tagline': 'blog_tagline'
+    }
+    default_kwargs.update(kwargs)
+    return Blog(key_name='blog', **default_kwargs).put()
+
+
 class TestIndexPage(AppEngineTestCase):
     url = reverse('index')
 
     def setUp(self):
-        Blog(title='my_blog_title', tagline='my_tagline').put()
+        create_blog()
 
     def test_name_and_tagline_in_page(self):
         resp = self.client.get(self.url)
-        self.assertContains(resp, 'my_blog_title')
-        self.assertContains(resp, 'my_tagline')
+        self.assertContains(resp, 'blog_title')
+        self.assertContains(resp, 'blog_tagline')
 
     def test_no_articles(self):
         resp = self.client.get(self.url)
@@ -68,7 +80,7 @@ class TestArticleCreatePage(AppEngineTestCase):
     url = reverse('article_admin_create')
 
     def setUp(self):
-        Blog(title='my_blog_title').put()
+        create_blog()
 
     def test_user_not_admin(self):
         self.users_login('user@localhost', is_admin=False)
@@ -112,7 +124,7 @@ class TestUpdateBlog(AppEngineTestCase):
     url = reverse('blog_admin_update')
 
     def setUp(self):
-        Blog(title='my_blog_title', tagline='tagline').put()
+        create_blog()
 
     def test_user_not_admin(self):
         self.users_login('user@localhost', is_admin=False)
@@ -129,8 +141,8 @@ class TestUpdateBlog(AppEngineTestCase):
 
         self.client.post(self.url, data)
 
-        self.assertEqual(Blog.get_unique().title, 'my_blog_title')
-        self.assertEqual(Blog.get_unique().tagline, 'tagline')
+        self.assertEqual(Blog.get_unique().title, 'blog_title')
+        self.assertEqual(Blog.get_unique().tagline, 'blog_tagline')
 
     def test_post_valid(self):
         self.users_login('admin@localhost', is_admin=True)
@@ -146,7 +158,7 @@ class TestUpdateBlog(AppEngineTestCase):
 
 class TestDeleteArticle(AppEngineTestCase):
     def setUp(self):
-        Blog(title='my_blog_title').put()
+        create_blog()
 
     def test_user_not_admin(self):
         Article(title='title', body='body').put()
@@ -190,7 +202,7 @@ class TestDeleteArticle(AppEngineTestCase):
 
 class TestUpdateArticle(AppEngineTestCase):
     def setUp(self):
-        Blog(title='my_blog_title').put()
+        create_blog()
         self.key = Article(title='title123', body='body123').put()
         self.url = reverse(
             'article_admin_update',

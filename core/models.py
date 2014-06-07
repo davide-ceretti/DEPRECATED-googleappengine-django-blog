@@ -1,4 +1,3 @@
-from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.http import Http404
 
 from google.appengine.ext import db
@@ -12,16 +11,10 @@ class Blog(db.Model):
     def get_unique():
         """
         Returns the only instance of the Blog in the data store.
-        If there are no Blog or there are more than one, raise an
-        exception.
+        If there are no Blog it creates a default one.
         """
-        blogs = Blog.all()
-        count = blogs.count()
-        if count == 0:
-            raise ObjectDoesNotExist
-        elif count > 1:
-            raise MultipleObjectsReturned
-        return blogs[0]
+        blog = Blog.get_or_insert('blog', title='My Blog')
+        return blog
 
 
 class Article(db.Model):

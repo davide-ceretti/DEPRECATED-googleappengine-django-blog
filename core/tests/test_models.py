@@ -1,7 +1,6 @@
 """
 Unit test models methods and properties.
 """
-from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.http import Http404
 
 from ndbtestcase import AppEngineTestCase
@@ -10,23 +9,21 @@ from core.models import Blog, Article
 
 class TestBlog(AppEngineTestCase):
     def test_get_unique_no_blogs(self):
-        with self.assertRaises(ObjectDoesNotExist):
-            Blog.get_unique()
-
-    def test_get_unique_multiple_blogs(self):
-        Blog(title='blog_one').put()
-        Blog(title='blog_two').put()
-        with self.assertRaises(MultipleObjectsReturned):
-            Blog.get_unique()
+        blog = Blog.get_unique()
+        self.assertEqual(blog.key().name(), 'blog')
+        self.assertEqual(blog.title, 'My Blog')
+        self.assertEqual(blog.tagline, None)
+        self.assertEqual(Blog.all().count(), 1)
 
     def test_get_unique_one_blog(self):
-        blog = Blog(title='blog_one')
+        blog = Blog(key_name='blog', title='blog_one')
         blog.put()
 
         result = Blog.get_unique()
 
-        # TODO: Implement self.assertObjectEqual()
-        self.assertEqual(result.key(), blog.key())
+        self.assertEqual(result.title, 'blog_one')
+        self.assertEqual(result.tagline, None)
+        self.assertEqual(Blog.all().count(), 1)
 
 
 class TestArticle(AppEngineTestCase):
