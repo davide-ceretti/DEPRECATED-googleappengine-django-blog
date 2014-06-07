@@ -24,7 +24,7 @@ class TestIndexPage(AppEngineTestCase):
     url = reverse('index')
 
     def setUp(self):
-        create_blog()
+        self.blog_key = create_blog()
 
     def test_name_and_tagline_in_page(self):
         resp = self.client.get(self.url)
@@ -74,6 +74,15 @@ class TestIndexPage(AppEngineTestCase):
         self.assertNotContains(resp, 'Settings')
         self.assertNotContains(resp, 'Add article')
         self.assertNotContains(resp, 'Logout')
+
+    def test_tagline_not_displayed_if_its_none(self):
+        blog = Blog.get(self.blog_key)
+        blog.tagline = None
+        blog.put()
+
+        resp = self.client.get(self.url)
+
+        self.assertNotContains(resp, 'None')
 
 
 class TestArticleCreatePage(AppEngineTestCase):
