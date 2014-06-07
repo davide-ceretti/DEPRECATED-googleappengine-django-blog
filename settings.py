@@ -1,5 +1,4 @@
 import os
-import sys
 
 APPENGINE_PRODUCTION = os.getenv('APPENGINE_PRODUCTION')
 
@@ -15,6 +14,8 @@ ADMINS = (
 )
 
 MANAGERS = ADMINS
+
+BLOG_KEY_NAME = 'blog'
 
 # A custom cache backend using AppEngine's memcached
 CACHES = {

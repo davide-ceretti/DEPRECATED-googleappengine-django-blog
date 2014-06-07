@@ -2,9 +2,10 @@
 Functional tests that go through the full request response cycle.
 They test HTML templates, middlewares and views.
 """
-from ndbtestcase import AppEngineTestCase
 from django.core.urlresolvers import reverse
+from django.conf import settings
 
+from ndbtestcase import AppEngineTestCase
 from core.models import Blog, Article
 
 
@@ -17,7 +18,7 @@ def create_blog(**kwargs):
         'tagline': 'blog_tagline'
     }
     default_kwargs.update(kwargs)
-    return Blog(key_name='blog', **default_kwargs).put()
+    return Blog(key_name=settings.BLOG_KEY_NAME, **default_kwargs).put()
 
 
 class TestIndexPage(AppEngineTestCase):

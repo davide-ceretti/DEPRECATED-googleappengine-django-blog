@@ -2,6 +2,7 @@
 Unit test models methods and properties.
 """
 from django.http import Http404
+from django.conf import settings
 
 from ndbtestcase import AppEngineTestCase
 from core.models import Blog, Article
@@ -16,7 +17,7 @@ class TestBlog(AppEngineTestCase):
         self.assertEqual(Blog.all().count(), 1)
 
     def test_get_unique_one_blog(self):
-        blog = Blog(key_name='blog', title='blog_one')
+        blog = Blog(key_name=settings.BLOG_KEY_NAME, title='blog_one')
         blog.put()
 
         result = Blog.get_unique()
