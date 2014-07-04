@@ -200,7 +200,8 @@ LOGGING = {
 }
 
 ALLOWED_HOSTS = [
-    'dav-ceretti.appspot.com'
+    'dav-ceretti.appspot.com',
+    'blog.davideceretti.com',
 ]
 
 try:
