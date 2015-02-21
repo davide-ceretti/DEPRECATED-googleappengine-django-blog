@@ -1,5 +1,7 @@
 # A simple Django Blog built on Google App Engine
 
+**Project is DEPRECATED, see https://github.com/davide-ceretti/googleappengine-djangae-blog**
+
 The idea is to create a simple blog with Django on Google App Engine by using App Engine models.
 
 I'm using the Django Google App Engine integration (https://github.com/potatolondon/djappengine), tweaked so that it runs with the latest SDK and it has a couple of additional features.
